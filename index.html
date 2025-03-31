@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Code Editor</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <!-- CodeMirror CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/dracula.min.css">
+
+    <!-- CodeMirror JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/python/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/clike/clike.min.js"></script>
+</head>
+<body>
+    <div class="sidebar">
+        <button onclick="createFolder()">Create Folder</button>
+        <button onclick="createFile()">Create File</button>
+        <button onclick="deleteFolder()">Delete Folder</button>
+        <button onclick="deleteFile()">Delete File</button>
+        <button onclick="saveAllFiles()">Save All</button>
+        <button onclick="downloadProject()">Download</button>
+        <h3>Files</h3>
+        <div id="file-tree"></div>
+    </div>
+
+    <div class="main-container">
+        <div class="editor-container">
+            <div id="tabs"></div>
+            <textarea id="editor"></textarea>
+            <button onclick="runCode()">Run</button>
+        </div>
+        <div class="console-panel">
+            <h3>Console Output</h3>
+            <pre id="console-output"></pre>
+        </div>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
