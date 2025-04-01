@@ -1,5 +1,7 @@
 let openFiles = {};
+
 const BASE_URL = "http://127.0.0.1:8000";
+
 let editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
     mode: "python",
     theme: "dracula",
@@ -7,34 +9,52 @@ let editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
     matchBrackets: true
 });
 
-// Load file tree
 async function loadFiles() {
     const response = await fetch(`${BASE_URL}/list-files`);
+
+    // Check response status
+    if (!response.ok) {
+        console.error(`Error: ${response.status} - ${response.statusText}`);
+        return;
+    }
+
     const files = await response.json();
+    console.log("API Response:", files); // Debug response
+
     const fileTree = document.getElementById("file-tree");
     fileTree.innerHTML = "";
 
-    for (let folder in files) {
-        let folderElement = document.createElement("div");
-        folderElement.className = "folder";
-        folderElement.textContent = folder;
-        folderElement.onclick = () => toggleFolder(folderElement);
+    // Check if response is an object before processing
+    if (typeof files === "object" && files !== null) {
+        for (let folder in files) {
+            let folderElement = document.createElement("div");
+            folderElement.className = "folder";
+            folderElement.textContent = folder;
+            folderElement.onclick = () => toggleFolder(folderElement);
 
-        let fileList = document.createElement("div");
-        fileList.style.display = "none";
+            let fileList = document.createElement("div");
+            fileList.style.display = "none";
 
-        files[folder].forEach(file => {
-            let fileElement = document.createElement("div");
-            fileElement.className = "file";
-            fileElement.textContent = file;
-            fileElement.onclick = () => openFile(folder, file);
-            fileList.appendChild(fileElement);
-        });
+            if (Array.isArray(files[folder])) {
+                files[folder].forEach(file => {
+                    let fileElement = document.createElement("div");
+                    fileElement.className = "file";
+                    fileElement.textContent = file;
+                    fileElement.onclick = () => openFile(folder, file);
+                    fileList.appendChild(fileElement);
+                });
+            } else {
+                console.error(`Unexpected format in folder: ${folder}`);
+            }
 
-        folderElement.appendChild(fileList);
-        fileTree.appendChild(folderElement);
+            folderElement.appendChild(fileList);
+            fileTree.appendChild(folderElement);
+        }
+    } else {
+        console.error("Unexpected response format. Expected an object.");
     }
 }
+
 // Switch active tab
 function switchTab(fileName) {
     document.querySelectorAll(".tab").forEach(tab => tab.classList.remove("active"));
@@ -45,11 +65,27 @@ function switchTab(fileName) {
     }
 }
 
+
 // Toggle folder
 function toggleFolder(folderElement) {
     let fileList = folderElement.children[0];
     fileList.style.display = fileList.style.display === "none" ? "block" : "none";
 }
+
+// Populate File Tree
+function populateFileTree(files) {
+    const fileTree = document.getElementById("file-tree");
+    fileTree.innerHTML = "";
+
+    files.forEach(file => {
+        let fileDiv = document.createElement("div");
+        fileDiv.className = "file";
+        fileDiv.textContent = file;
+        fileDiv.onclick = () => openFile(file);
+        fileTree.appendChild(fileDiv);
+    });
+}
+
 
 // Open file
 async function openFile(folder, fileName) {

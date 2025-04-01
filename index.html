@@ -1,42 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Code Editor</title>
     <link rel="stylesheet" href="/static/style.css">
-    <!-- CodeMirror CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/dracula.min.css">
+</head>
 
-    <!-- CodeMirror JS -->
+<body>
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="file-menu">
+            <button onclick="createFolder()">📂 Create Folder</button>
+            <button onclick="createFile()">📄 Create File</button>
+            <button onclick="deleteFolder()">🗑️ Delete Folder</button>
+            <button onclick="deleteFile()">🗑️ Delete File</button>
+            <button onclick="saveAllFiles()">💾 Save All</button>
+            <button onclick="downloadProject()">📥 Download</button>
+        </div>
+        <div class="run-menu">
+            <select id="language-select" onchange="changeLanguage()">
+                <option value="python">Python</option>
+                <option value="java">Java</option>
+            </select>
+            <button onclick="runCode()">▶ Run</button>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Sidebar for File Structure -->
+        <div class="sidebar">
+            <h3>Project Files</h3>
+            <div id="file-tree"></div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="editor-container">
+                <div id="tabs"></div>
+                <textarea id="editor"></textarea>
+            </div>
+
+            <!-- Console Output -->
+            <div class="console-panel">
+                <h3>Console Output</h3>
+                <pre id="console-output"></pre>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/python/python.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/clike/clike.min.js"></script>
-</head>
-<body>
-    <div class="sidebar">
-        <button onclick="createFolder()">Create Folder</button>
-        <button onclick="createFile()">Create File</button>
-        <button onclick="deleteFolder()">Delete Folder</button>
-        <button onclick="deleteFile()">Delete File</button>
-        <button onclick="saveAllFiles()">Save All</button>
-        <button onclick="downloadProject()">Download</button>
-        <h3>Files</h3>
-        <div id="file-tree"></div>
-    </div>
-
-    <div class="main-container">
-        <div class="editor-container">
-            <div id="tabs"></div>
-            <textarea id="editor"></textarea>
-            <button onclick="runCode()">Run</button>
-        </div>
-        <div class="console-panel">
-            <h3>Console Output</h3>
-            <pre id="console-output"></pre>
-        </div>
-    </div>
-
     <script src="/static/script.js"></script>
+
 </body>
+
 </html>

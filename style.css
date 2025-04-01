@@ -1,64 +1,107 @@
-body {
+/* Reset */
+* {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Body */
+body {
     background: #1e1e1e;
     color: white;
-    font-family: Arial, sans-serif;
-    height: 100vh;
     display: flex;
+    flex-direction: column;
+    height: 100vh;
 }
 
-/* Fixed Sidebar */
-.sidebar {
-    width: 250px;
+/* Top Bar */
+.top-bar {
     background: #252526;
     padding: 10px;
-    border-right: 2px solid #333;
-    overflow-y: auto;
-    position: fixed;
-    left: 0;
-    top: 0;
-    bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #333;
 }
 
-.sidebar button {
-    width: 100%;
-    padding: 10px;
-    margin: 5px 0;
-    background: #007acc;
+/* File Menu */
+.file-menu {
+    display: flex;
+    gap: 10px;
+}
+
+.run-menu {
+    display: flex;
+    gap: 10px;
+}
+
+/* Menu Buttons */
+button {
+    background: #3a3a3a;
     color: white;
-    border: none;
+    border: 1px solid #444;
+    padding: 8px 12px;
+    border-radius: 5px;
     cursor: pointer;
 }
 
+button:hover {
+    background: #007acc;
+}
+
 /* Main Container */
-.main-container {
-    margin-left: 260px;
+.container {
+    display: flex;
+    height: calc(100vh - 50px);
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    background: #2e2e2e;
+    padding: 10px;
+    overflow-y: auto;
+    border-right: 2px solid #444;
+}
+
+.sidebar h3 {
+    margin-bottom: 10px;
+}
+
+#file-tree {
+    background: #3a3a3a;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
     display: flex;
     flex-direction: column;
-    width: calc(100% - 260px);
-    height: 100vh;
 }
 
 /* Editor */
 .editor-container {
     flex: 1;
+    border-bottom: 2px solid #444;
     display: flex;
     flex-direction: column;
-    padding: 10px;
+    background: #1e1e1e;
 }
 
 #tabs {
-    display: flex;
-    background: #2d2d2d;
+    background: #252526;
     padding: 5px;
+    display: flex;
+    gap: 5px;
 }
 
 .tab {
-    background: #3a3a3a;
-    color: white;
-    padding: 8px;
-    margin-right: 5px;
+    background: #333;
+    padding: 5px 10px;
+    border-radius: 5px;
     cursor: pointer;
 }
 
@@ -66,19 +109,28 @@ body {
     background: #007acc;
 }
 
-/* CodeMirror */
-.CodeMirror {
-    flex: 1;
-    height: 70vh;
-    font-size: 14px;
+/* Console */
+.console-panel {
+    background: #1e1e1e;
+    padding: 10px;
+    overflow-y: auto;
+    height: 150px;
+    border-top: 2px solid #444;
 }
 
-/* Console Panel */
-.console-panel {
-    background: #111;
-    color: #fff;
+/* CodeMirror Styling */
+.CodeMirror {
+    height: calc(100vh - 200px);
+    border: 1px solid #444;
+    border-radius: 5px;
+}
+
+/* Console Output */
+#console-output {
+    background: #121212;
+    color: #33ff33;
     padding: 10px;
-    height: 150px;
+    border-radius: 5px;
     overflow-y: auto;
-    border-top: 2px solid #444;
+    height: 120px;
 }
