@@ -1,12 +1,15 @@
 import os
 import shutil
 import subprocess
+import time
+
 from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from typing import Dict
 
 from starlette.middleware.cors import CORSMiddleware
+from starlette.responses import FileResponse
 
 app = FastAPI()
 app.add_middleware(
@@ -33,11 +36,13 @@ class FileRequest(BaseModel):
 class FolderRequest(BaseModel):
     folder_name: str
 
+
 @app.get("/")
 async def read_index():
     with open("C:/Users/lenovo/PycharmProjects/sandbox/frontend/index.html", "r") as f:
         content = f.read()
     return content
+
 
 # Create Folder
 @app.post("/create-folder")
@@ -143,3 +148,27 @@ async def execute_code(request: FileRequest):
 async def download():
     shutil.make_archive("project", 'zip', BASE_DIR)
     return {"message": "Download project.zip"}
+
+
+ZIP_FILE_PATH = "C:\\Users\\lenovo\\PycharmProjects\\sandbox\\user_data\\project.zip"
+
+
+@app.get("/download")
+async def download_project():
+    if not os.path.exists(BASE_DIR) or not os.listdir(BASE_DIR):
+        raise HTTPException(status_code=404, detail="No files found to download.")
+
+    # Ensure no stale ZIP file exists
+    if os.path.exists(ZIP_FILE_PATH):
+        os.remove(ZIP_FILE_PATH)
+
+    # Create ZIP with correct structure
+    shutil.make_archive("project", "zip", BASE_DIR)
+
+    # Ensure file is fully written before returning response
+    time.sleep(1)  # Small delay to allow file system to catch up
+
+    if not os.path.exists(ZIP_FILE_PATH):
+        raise HTTPException(status_code=500, detail="ZIP file creation failed.")
+
+    return FileResponse(ZIP_FILE_PATH, filename="project.zip", media_type="application/zip")
